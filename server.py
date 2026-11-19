@@ -56,7 +56,7 @@ def chat():
     "a menos que o usuário peça. Não repita a pergunta. "
     "Se a solicitação for vaga, faça apenas uma pergunta curta para esclarecer. "
     "Seja útil, direto e mantenha o contexto da conversa."
-)
+
 
                 )
             },
