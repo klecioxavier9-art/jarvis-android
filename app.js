@@ -17,7 +17,36 @@ function addMessage(who, text) {
   conversation.scrollTop = conversation.scrollHeight;
 }
 
+
 function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "pt-BR";
+  utterance.rate = 0.92;
+  utterance.pitch = 0.85;
+
+  const voices = window.speechSynthesis.getVoices();
+
+  const ptVoices = voices.filter(v =>
+    v.lang && v.lang.toLowerCase().startsWith("pt-br")
+  );
+
+  const maleVoice = ptVoices.find(v =>
+    /male|masculino|daniel/i.test(v.name)
+  );
+
+  if (maleVoice) {
+    utterance.voice = maleVoice;
+  } else if (ptVoices.length > 0) {
+    utterance.voice = ptVoices[0];
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
