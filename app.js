@@ -31,7 +31,7 @@ function speak(text) {
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "pt-BR";
-  utterance.rate = 0.92;
+  utterance.rate = 0.85;
   utterance.pitch = 0.75;
 
   window.speechSynthesis.speak(utterance);
