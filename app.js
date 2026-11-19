@@ -9,8 +9,6 @@ const input = $("textInput");
 
 const API_URL = "https://jarvis-android-g5i4.onrender.com/chat";
 
-let processing = false;
-
 function addMessage(who, text) {
   const item = document.createElement("div");
   item.className = `msg ${who}`;
@@ -24,8 +22,6 @@ function addMessage(who, text) {
   item.append(label, body);
   conversation.appendChild(item);
   conversation.scrollTop = conversation.scrollHeight;
-
-  return body;
 }
 
 function speak(text) {
@@ -38,33 +34,25 @@ function speak(text) {
   utterance.rate = 0.92;
   utterance.pitch = 0.85;
 
-  const voices = window.speechSynthesis.getVoices();
-  const ptVoices = voices.filter(v =>
-    v.lang && v.lang.toLowerCase().startsWith("pt-br")
-  );
-
-  const maleVoice = ptVoices.find(v =>
-    /male|masculino|daniel/i.test(v.name)
-  );
-
-  if (maleVoice) utterance.voice = maleVoice;
-
   window.speechSynthesis.speak(utterance);
 }
 
 function answerLocal(raw) {
-  const q = raw.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  const q = raw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-  if (q.includes("que horas") || q === "hora") {
+  if (q.includes("parar de falar") || q.includes("silencio")) {
+    window.speechSynthesis?.cancel();
+    return "Certo. Interrompi a fala.";
+  }
+
+  if (q.includes("que horas") || q.includes("hora")) {
     return `Agora são ${new Date().toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit"
     })}.`;
   }
 
-  if (q.includes("que dia") || q.includes("data de hoje")) {
+  if (q.includes("que dia") || q.includes("data de hoje") || q.includes("data")) {
     return `Hoje é ${new Date().toLocaleDateString("pt-BR", {
       weekday: "long",
       day: "numeric",
@@ -73,17 +61,12 @@ function answerLocal(raw) {
     })}.`;
   }
 
-  if (q.includes("parar de falar") || q.includes("silencio")) {
-    window.speechSynthesis?.cancel();
-    return "Certo. Interrompi a fala.";
-  }
-
   return null;
 }
 
 async function handleCommand(text) {
   const clean = text.trim();
-  if (!clean || processing) return;
+  if (!clean) return;
 
   addMessage("user", clean);
 
@@ -95,13 +78,7 @@ async function handleCommand(text) {
     return;
   }
 
-  processing = true;
-  state.textContent = "CONSULTANDO IA";
-
-  const responseMessage = addMessage(
-    "jarvis",
-    "Estou processando sua solicitação..."
-  );
+  state.textContent = "PROCESSANDO";
 
   try {
     const response = await fetch(API_URL, {
@@ -117,35 +94,27 @@ async function handleCommand(text) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Falha na conexão com a IA.");
+      throw new Error(data.error || "Erro ao consultar a inteligência artificial.");
     }
 
-    const answer = data.reply || "Não recebi uma resposta da IA.";
-
-    responseMessage.textContent = answer;
+    const answer = data.reply || "Não recebi uma resposta válida.";
+    addMessage("jarvis", answer);
     speak(answer);
 
   } catch (error) {
-    const message =
-      "Não consegui acessar minha inteligência artificial. " +
-      "Verifique a conexão e tente novamente.";
-
-    responseMessage.textContent = message;
-    console.error("Erro JARVIS:", error);
-
+    addMessage(
+      "jarvis",
+      "Não consegui acessar minha inteligência artificial. Verifique sua conexão e tente novamente. Detalhe: " + error.message
+    );
   } finally {
-    processing = false;
     state.textContent = "AGUARDANDO";
   }
 }
 
 $("textForm").addEventListener("submit", (event) => {
   event.preventDefault();
-
-  const message = input.value;
+  handleCommand(input.value);
   input.value = "";
-
-  handleCommand(message);
 });
 
 document.querySelectorAll("[data-command]").forEach(button => {
@@ -178,33 +147,28 @@ if (SpeechRecognition) {
 
   recognition.onerror = (event) => {
     state.textContent = "ERRO DE MICROFONE";
-
     addMessage(
       "jarvis",
-      `Não consegui reconhecer a fala (${event.error}). Verifique a permissão do microfone.`
+      `Não consegui reconhecer a fala (${event.error}). Verifique a permissão do microfone e tente novamente.`
     );
   };
 
   recognition.onend = () => {
+    state.textContent = "AGUARDANDO";
     micLabel.textContent = "TOQUE PARA FALAR";
     micButton.classList.remove("listening");
-
-    if (!processing) {
-      state.textContent = "AGUARDANDO";
-    }
   };
 
 } else {
   $("supportNote").textContent =
-    "Este navegador não oferece reconhecimento de voz. " +
-    "Use o Chrome atualizado ou digite seus comandos.";
+    "Este navegador não oferece reconhecimento de voz. Use o Chrome atualizado ou digite seus comandos.";
 
   micButton.disabled = true;
   micButton.style.opacity = ".5";
 }
 
 micButton.addEventListener("click", () => {
-  if (!recognition || processing) return;
+  if (!recognition) return;
 
   try {
     window.speechSynthesis?.cancel();
@@ -217,8 +181,7 @@ micButton.addEventListener("click", () => {
   }
 });
 
-if ("serviceWorker" in navigator &&
-    location.protocol.startsWith("http")) {
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
