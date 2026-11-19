@@ -9,6 +9,9 @@ const input = $("textInput");
 
 const API_URL = "https://jarvis-android-g5i4.onrender.com/chat";
 
+// Histórico das conversas durante a sessão
+let chatHistory = [];
+
 function addMessage(who, text) {
   const item = document.createElement("div");
   item.className = `msg ${who}`;
@@ -22,6 +25,15 @@ function addMessage(who, text) {
   item.append(label, body);
   conversation.appendChild(item);
   conversation.scrollTop = conversation.scrollHeight;
+}
+
+function saveHistory(userMessage, assistantMessage) {
+  chatHistory.push(
+    { role: "user", content: userMessage },
+    { role: "assistant", content: assistantMessage }
+  );
+
+  chatHistory = chatHistory.slice(-12);
 }
 
 function speak(text) {
@@ -74,11 +86,23 @@ async function handleCommand(text) {
 
   const localAnswer = answerLocal(clean);
 
-  if (localAnswer) {
+if (localAnswer) {
     addMessage("jarvis", localAnswer);
-    speak(localAnswer);
+    saveHistory(clean, localAnswer);
+
+    const normalized = clean.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    if (
+      !normalized.includes("parar de falar") &&
+      !normalized.includes("silencio")
+    ) {
+      speak(localAnswer);
+    }
+
     return;
-  }
+}
 
   state.textContent = "PROCESSANDO";
 
@@ -89,7 +113,8 @@ async function handleCommand(text) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: clean
+        message: clean,
+        history: chatHistory.slice(-12)
       })
     });
 
@@ -104,6 +129,7 @@ async function handleCommand(text) {
     const answer = data.reply || "Não recebi uma resposta válida.";
 
     addMessage("jarvis", answer);
+    saveHistory(clean, answer);
     speak(answer);
 
   } catch (error) {
