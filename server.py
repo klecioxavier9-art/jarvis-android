@@ -47,8 +47,6 @@ def chat():
             {
                 "role": "system",
                 "content": (
-                
-"content": (
     "Você é JARVIS, um assistente pessoal inteligente, "
     "educado, objetivo e natural. Converse em português brasileiro "
     "como um assistente pessoal presente e atencioso. "
