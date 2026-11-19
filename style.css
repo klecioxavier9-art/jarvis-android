@@ -1,0 +1,24 @@
+*{box-sizing:border-box} :root{color-scheme:dark;--cyan:#57d9ff;--blue:#1679c8;--muted:#8ea7bd}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 12%,#102b45 0,#07111f 48%,#030811 100%);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#edf8ff}
+.app{width:min(100%,680px);margin:auto;padding:18px 18px 24px}
+.top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #24445b;padding:5px 0 17px}
+.brand{display:flex;gap:11px;align-items:center}.brand-mark{width:39px;height:39px;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;color:var(--cyan);font-size:23px;box-shadow:0 0 18px #1689c966}
+.brand strong{display:block;letter-spacing:3px;font-size:14px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:2px;margin-top:3px}
+.status{font-size:9px;letter-spacing:1px;color:#a9c5d8}.status i{display:inline-block;width:7px;height:7px;background:#51e3a2;border-radius:50%;margin-right:6px;box-shadow:0 0 9px #51e3a2}
+.hero{text-align:center;position:relative;padding:28px 0 22px;overflow:hidden}
+.core{width:142px;height:142px;margin:8px auto 20px;border-radius:50%;border:1px solid #4ccfff99;display:grid;place-items:center;box-shadow:0 0 25px #168ac955,inset 0 0 25px #168ac933;position:relative;z-index:1}
+.core:before,.core:after{content:"";position:absolute;inset:10px;border:1px dashed #5edcff88;border-radius:50%;animation:spin 18s linear infinite}.core:after{inset:22px;border-style:solid;animation-direction:reverse;animation-duration:12s}
+.core-inner{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#1b8bc0,#09243c 68%);box-shadow:0 0 30px #37cfff88;color:#e8fbff;font-size:42px;font-weight:200}
+.orbit{position:absolute;border:1px solid #2e9cc333;border-radius:50%;left:50%;top:92px;transform:translate(-50%,-50%)}.orbit-a{width:235px;height:235px}.orbit-b{width:285px;height:285px;border-style:dashed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.eyebrow{font-size:9px;letter-spacing:2.5px;color:var(--cyan);margin:8px 0}
+h1{font-size:29px;line-height:1.16;font-weight:500;margin:10px 0}h1 em{font-style:normal;color:var(--cyan)}.sub{font-size:12px;color:var(--muted)}
+.panel{border:1px solid #28506a;background:#081827dd;border-radius:17px;padding:14px;box-shadow:0 12px 35px #0005}
+.panel-head{display:flex;justify-content:space-between;color:#a8c4d8;font-size:9px;letter-spacing:1.3px;border-bottom:1px solid #1b3b50;padding-bottom:11px}.panel-head span:last-child{color:var(--cyan)}
+.conversation{height:150px;overflow:auto;padding:10px 2px}.msg{font-size:13px;line-height:1.5;margin:7px 0;padding:9px 11px;border-radius:10px;max-width:95%}.msg p{margin:3px 0 0}.msg b{font-size:9px;letter-spacing:1.4px;color:var(--cyan)}.jarvis{background:#10283b;border-left:2px solid var(--cyan)}.user{background:#162b40;margin-left:auto;border-right:2px solid #7aa9ff}.user b{color:#a9c4ff}
+.composer{display:flex;gap:8px;margin-top:8px}.composer input{min-width:0;flex:1;background:#06111d;border:1px solid #28506a;border-radius:10px;padding:13px;color:white;font-size:14px;outline:none}.composer input:focus{border-color:var(--cyan)}button{font:inherit;cursor:pointer}.send{width:46px;border:0;border-radius:10px;background:#147eae;color:white;font-size:20px}
+.mic-button{width:100%;margin-top:11px;padding:14px;border:1px solid #47c9f5;border-radius:11px;background:linear-gradient(90deg,#0b4263,#0b6b91);color:#eafaff;font-size:11px;font-weight:700;letter-spacing:1.5px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 0 18px #168ac933}
+.mic-button.listening{background:linear-gradient(90deg,#742b3b,#a53a52);border-color:#ff8498}.mic-icon{font-size:19px}.support-note{text-align:center;color:#7893a8;font-size:10px;margin:10px 0 0}
+.quick{padding:20px 2px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chips button{border:1px solid #28506a;background:#0b1b2b;color:#cde7f5;border-radius:20px;padding:8px 12px;font-size:11px}
+footer{text-align:center;color:#59748a;font-size:9px;letter-spacing:1.4px;padding:10px 0}
+@media(min-width:560px){.app{padding-top:25px}.hero{padding-top:35px}.conversation{height:180px}}

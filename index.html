@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <title>JARVIS • Assistente Pessoal</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand"><span class="brand-mark">J</span><div><strong>J.A.R.V.I.S.</strong><small>ASSISTENTE PESSOAL</small></div></div>
+      <span class="status"><i></i> SISTEMA LOCAL</span>
+    </header>
+
+    <section class="hero">
+      <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+      <div class="core"><div class="core-inner"><span>J</span></div></div>
+      <p class="eyebrow">INTERFACE DE COMANDO</p>
+      <h1>Bom dia. Estou<br><em>à sua disposição.</em></h1>
+      <p class="sub">Protótipo inicial • Voz e comandos básicos</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><span>CONSOLE DE COMUNICAÇÃO</span><span id="state">AGUARDANDO</span></div>
+      <div id="conversation" class="conversation" aria-live="polite">
+        <div class="msg jarvis"><b>JARVIS</b><p>Olá! Sou seu assistente. Toque no microfone e diga “Olá, JARVIS” ou digite um comando.</p></div>
+      </div>
+      <form id="textForm" class="composer">
+        <input id="textInput" type="text" placeholder="Digite um comando..." autocomplete="off">
+        <button type="submit" class="send" aria-label="Enviar">➤</button>
+      </form>
+      <button id="micButton" class="mic-button"><span class="mic-icon">🎙</span><span id="micLabel">TOQUE PARA FALAR</span></button>
+      <p id="supportNote" class="support-note">O reconhecimento de voz depende do navegador e da conexão.</p>
+    </section>
+
+    <section class="quick">
+      <p class="eyebrow">COMANDOS PARA TESTAR</p>
+      <div class="chips">
+        <button data-command="Que horas são?">Que horas são?</button>
+        <button data-command="Que dia é hoje?">Que dia é hoje?</button>
+        <button data-command="Ajuda">Ajuda</button>
+        <button data-command="Quem é você?">Quem é você?</button>
+      </div>
+    </section>
+    <footer>JARVIS MVP • VERSÃO 0.1 • AINDA SEM CONEXÃO À IA</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
