@@ -32,13 +32,15 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "pt-BR";
   utterance.rate = 0.92;
-  utterance.pitch = 0.85;
+  utterance.pitch = 0.75;
 
   window.speechSynthesis.speak(utterance);
 }
 
 function answerLocal(raw) {
-  const q = raw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const q = raw.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
   if (q.includes("parar de falar") || q.includes("silencio")) {
     window.speechSynthesis?.cancel();
@@ -94,10 +96,13 @@ async function handleCommand(text) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Erro ao consultar a inteligência artificial.");
+      throw new Error(
+        data.error || "Erro ao consultar a inteligência artificial."
+      );
     }
 
     const answer = data.reply || "Não recebi uma resposta válida.";
+
     addMessage("jarvis", answer);
     speak(answer);
 
